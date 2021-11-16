@@ -45,6 +45,12 @@ ENV CHROMEDRIVER_PORT 4444
 ENV CHROMEDRIVER_WHITELISTED_IPS "127.0.0.1"
 ENV CHROMEDRIVER_URL_BASE ''
 ENV CHROMEDRIVER_EXTRA_ARGS ''
+ENV PATH="${PATH}:/opt/chromedriver/"
+
+RUN export CHROMEDRIVER_VERSION=`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE`
+ENV CHROMEDRIVER_VERSION="$CHROMEDRIVER_VERSION"
+ENV CHROME_VERSION="$CHROMEDRIVER_VERSION"
+
 
 EXPOSE 4444
 EXPOSE 6700
@@ -53,7 +59,3 @@ RUN pip3 install --upgrade pip --no-cache-dir && \
     pip3 install --upgrade setuptools --no-cache-dir && \
     pip3 install selenium --no-cache-dir
     
-RUN echo CHROMEDRIVER_VERSION=`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE` >> /etc/environment && \
-    echo CHROME_VERSION=`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE` >> /etc/environment
-
-ENV ENV PATH="${PATH}:/opt/chromedriver/"
