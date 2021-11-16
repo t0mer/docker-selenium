@@ -56,7 +56,4 @@ RUN pip3 install --upgrade pip --no-cache-dir && \
 RUN CHROMEDRIVER_VERSION=`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE` && \
     echo "export CHROME_VERSION=96.0.4664.45" >> /root/.bashrc && \
     echo 'export PATH=/opt/chromedriver-${CHROME_VERSION}:$PATH' >> /root/.bashrc \
-    chmod 777 /opt/dockerbot/Health_Statements.py && \
-    chmod 777 /opt/dockerbot/Mashov_Health_Statements.py
-
-ENTRYPOINT python /opt/dockerbot/dockerbot.py
+    cd /opt/chromedriver-${CHROME_VERSION}
