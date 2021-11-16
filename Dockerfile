@@ -53,11 +53,6 @@ RUN pip3 install --upgrade pip --no-cache-dir && \
     pip3 install --upgrade setuptools --no-cache-dir && \
     pip3 install selenium --no-cache-dir
     
-COPY setenv.sh /tmp
-RUN /bin/bash -c 'source /tmp/setenv.sh'
-
-# RUN CHROMEDRIVER_VERSION=`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE` && \
-#     echo "export CHROME_VERSION=96.0.4664.45" >> /root/.bashrc && \
-#     echo 'export PATH=$PATH:/opt/chromedriver-96.0.4664.45' >> /root/.bashrc \
-#     cd /opt/chromedriver-${CHROME_VERSION}
-
+RUN export CHROMEDRIVER_VERSION=`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE` >> /root/.bashrc && \
+    export CHROME_VERSION=$CHROMEDRIVER_VERSION >> /root/.bashrc && \
+    export PATH=/opt/chromedriver-$PATH:$CHROMEDRIVER_VERSION >> /root/.bashrc
