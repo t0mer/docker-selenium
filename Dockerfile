@@ -50,7 +50,7 @@ EXPOSE 6700
 
 RUN pip3 install --upgrade pip --no-cache-dir && \
     pip3 install --upgrade setuptools --no-cache-dir && \
-    pip3 install selenium --no-cache-dir && \
+    pip3 install selenium --no-cache-dir
     
 
 RUN CHROMEDRIVER_VERSION=`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE` && \
