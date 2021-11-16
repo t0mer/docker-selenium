@@ -14,12 +14,12 @@ RUN groupadd --system automation && \
     chown --recursive automation:automation /home/automation
 
 
-RUN apt-get -yqq update && \
-    apt-get -yqq install gnupg2 && \
-    apt-get -yqq install curl unzip && \
-    apt-get -yqq install iputils-ping && \
-    # apt-get -yqq install xvfb tinywm && \
-    apt-get -yqq install fonts-ipafont-gothic xfonts-100dpi xfonts-75dpi xfonts-scalable xfonts-cyrillic && \
+RUN apt -yqq update && \
+    apt -yqq install gnupg2 && \
+    apt -yqq install curl unzip && \
+    apt -yqq install iputils-ping && \
+    #apt -yqq install xvfb tinywm && \
+    apt get -yqq install fonts-ipafont-gothic xfonts-100dpi xfonts-75dpi xfonts-scalable xfonts-cyrillic && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Chrome WebDriver
@@ -54,7 +54,10 @@ RUN pip3 install --upgrade pip --no-cache-dir && \
     pip3 install selenium --no-cache-dir
     
 
-RUN CHROMEDRIVER_VERSION=`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE` && \
-    export CHROME_VERSION=$CHROMEDRIVER_VERSION >> /root/.bashrc && \
-    export PATH=/opt/chromedriver-$CHROMEDRIVER_VERSION:$PATH >> /root/.bashrc \
- 
+RUN source setenv.sh
+
+# RUN CHROMEDRIVER_VERSION=`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE` && \
+#     echo "export CHROME_VERSION=96.0.4664.45" >> /root/.bashrc && \
+#     echo 'export PATH=$PATH:/opt/chromedriver-96.0.4664.45' >> /root/.bashrc \
+#     cd /opt/chromedriver-${CHROME_VERSION}
+
