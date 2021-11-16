@@ -22,8 +22,9 @@ RUN apt -yqq update && \
     apt -yqq install fonts-ipafont-gothic xfonts-100dpi xfonts-75dpi xfonts-scalable xfonts-cyrillic && \
     rm -rf /var/lib/apt/lists/*
 
-RUN wget http://archive.ubuntu.com/ubuntu/pool/universe/t/tinywm/tinywm_1.3-9build1_amd64.deb -O /tmp/tinywm_1.3-9build1_amd64.deb && \
-    dpkg -i /tmp/tinywm_1.3-9build1_amd64.deb && \
+COPY tinywm_1.3-9build1_amd64.deb /tmp
+
+RUN dpkg -i /tmp/tinywm_1.3-9build1_amd64.deb && \
     rm -rf /tmp/tinywm_1.3-9build1_amd64.deb
 
 
