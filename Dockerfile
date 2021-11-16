@@ -19,7 +19,7 @@ RUN apt -yqq update && \
     apt -yqq install curl unzip && \
     apt -yqq install iputils-ping && \
     #apt -yqq install xvfb tinywm && \
-    apt get -yqq install fonts-ipafont-gothic xfonts-100dpi xfonts-75dpi xfonts-scalable xfonts-cyrillic && \
+    apt -yqq install fonts-ipafont-gothic xfonts-100dpi xfonts-75dpi xfonts-scalable xfonts-cyrillic && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Chrome WebDriver
