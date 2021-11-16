@@ -22,6 +22,10 @@ RUN apt -yqq update && \
     apt -yqq install fonts-ipafont-gothic xfonts-100dpi xfonts-75dpi xfonts-scalable xfonts-cyrillic && \
     rm -rf /var/lib/apt/lists/*
 
+RUN wget http://archive.ubuntu.com/ubuntu/pool/universe/t/tinywm/tinywm_1.3-9build1_amd64.deb -O /tmp/tinywm_1.3-9build1_amd64.deb && \
+    dpkg -i /tmp/tinywm_1.3-9build1_amd64.deb
+
+
 # Install Chrome WebDriver
 RUN CHROMEDRIVER_VERSION=`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE` && \
     mkdir -p /opt/chromedriver && \
