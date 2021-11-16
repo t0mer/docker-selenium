@@ -18,7 +18,7 @@ RUN apt -yqq update && \
     apt -yqq install gnupg2 && \
     apt -yqq install curl unzip && \
     apt -yqq install iputils-ping && \
-    apt -yqq install xvfb tinywm && \
+    apt -yqq install tinywm && \
     apt -yqq install fonts-ipafont-gothic xfonts-100dpi xfonts-75dpi xfonts-scalable xfonts-cyrillic && \
     rm -rf /var/lib/apt/lists/*
 
