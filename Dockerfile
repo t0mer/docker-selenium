@@ -24,12 +24,12 @@ RUN apt -yqq update && \
 
 # Install Chrome WebDriver
 RUN CHROMEDRIVER_VERSION=`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE` && \
-    mkdir -p /opt/chromedriver-$CHROMEDRIVER_VERSION && \
+    mkdir -p /opt/chromedriver && \
     curl -sS -o /tmp/chromedriver_linux64.zip http://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip && \
-    unzip -qq /tmp/chromedriver_linux64.zip -d /opt/chromedriver-$CHROMEDRIVER_VERSION && \
+    unzip -qq /tmp/chromedriver_linux64.zip -d /opt/chromedriver && \
     rm /tmp/chromedriver_linux64.zip && \
-    chmod +x /opt/chromedriver-$CHROMEDRIVER_VERSION/chromedriver && \
-    ln -fs /opt/chromedriver-$CHROMEDRIVER_VERSION/chromedriver /usr/local/bin/chromedriver
+    chmod +x /opt/chromedriver/chromedriver && \
+    ln -fs /opt/chromedriver/chromedriver /usr/local/bin/chromedriver
 
 # Install Google Chrome
 RUN curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
@@ -53,6 +53,7 @@ RUN pip3 install --upgrade pip --no-cache-dir && \
     pip3 install --upgrade setuptools --no-cache-dir && \
     pip3 install selenium --no-cache-dir
     
-RUN export CHROMEDRIVER_VERSION=`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE` >> /root/.bashrc && \
-    export CHROME_VERSION=$CHROMEDRIVER_VERSION >> /root/.bashrc && \
-    export PATH=/opt/chromedriver-$PATH:$CHROMEDRIVER_VERSION >> /root/.bashrc
+RUN echo CHROMEDRIVER_VERSION=`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE` >> /etc/environment && \
+    echo CHROME_VERSION=`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE` >> /etc/environment
+
+ENV ENV PATH="${PATH}:/opt/chromedriver/"
