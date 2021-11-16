@@ -55,6 +55,6 @@ RUN pip3 install --upgrade pip --no-cache-dir && \
     
 
 RUN CHROMEDRIVER_VERSION=`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE` && \
-    echo "export CHROME_VERSION=$CHROMEDRIVER_VERSION" >> /root/.bashrc && \
-    echo "export PATH=/opt/chromedriver-$CHROMEDRIVER_VERSION:$PATH" >> /root/.bashrc \
+    export CHROME_VERSION=$CHROMEDRIVER_VERSION >> /root/.bashrc && \
+    export PATH=/opt/chromedriver-$CHROMEDRIVER_VERSION:$PATH >> /root/.bashrc \
  
