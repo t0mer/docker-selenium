@@ -18,7 +18,7 @@ RUN apt -yqq update && \
     apt -yqq install gnupg2 && \
     apt -yqq install curl unzip && \
     apt -yqq install iputils-ping && \
-    #apt -yqq install xvfb tinywm && \
+    apt -yqq install xvfb tinywm && \
     apt -yqq install fonts-ipafont-gothic xfonts-100dpi xfonts-75dpi xfonts-scalable xfonts-cyrillic && \
     rm -rf /var/lib/apt/lists/*
 
@@ -46,11 +46,6 @@ ENV CHROMEDRIVER_WHITELISTED_IPS "127.0.0.1"
 ENV CHROMEDRIVER_URL_BASE ''
 ENV CHROMEDRIVER_EXTRA_ARGS ''
 ENV PATH="${PATH}:/opt/chromedriver/"
-
-RUN export CHROMEDRIVER_VERSION=`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE`
-ENV CHROMEDRIVER_VERSION="$CHROMEDRIVER_VERSION"
-ENV CHROME_VERSION="$CHROMEDRIVER_VERSION"
-
 
 EXPOSE 4444
 EXPOSE 6700
