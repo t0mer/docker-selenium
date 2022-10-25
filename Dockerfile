@@ -63,4 +63,3 @@ RUN pip3 install --upgrade pip --no-cache-dir && \
     pip3 install packaging --no-cache-dir
 
     
-git commit VERSION Dockerfile -m "update selenium version and adding packages + webdriver manager"
