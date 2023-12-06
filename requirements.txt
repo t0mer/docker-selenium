@@ -1,0 +1,4 @@
+selenium
+apprise
+webdriver_manager
+packaging 

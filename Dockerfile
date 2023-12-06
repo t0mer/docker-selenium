@@ -56,11 +56,9 @@ ENV PATH="${PATH}:/opt/chromedriver/"
 EXPOSE 4444
 EXPOSE 6700
 
-RUN pip3 install --upgrade pip --no-cache-dir && \
-    pip3 install --upgrade setuptools --no-cache-dir && \
-    pip3 install selenium --no-cache-dir && \
-    pip3 install apprise --no-cache-dir && \
-    pip3 install webdriver_manager --no-cache-dir && \
-    pip3 install packaging --no-cache-dir
+COPY requirements.txt /tmp
+
+RUN pip3 install --upgrade pip setuptools --no-cache-dir
+RUN pip3 install -r requirements.txt
 
     
