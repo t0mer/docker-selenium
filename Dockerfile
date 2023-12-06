@@ -59,6 +59,6 @@ EXPOSE 6700
 COPY requirements.txt /tmp
 
 RUN pip3 install --upgrade pip setuptools --no-cache-dir
-RUN pip3 install -r requirements.txt
+RUN pip3 install -r /tmp/requirements.txt
 
     
