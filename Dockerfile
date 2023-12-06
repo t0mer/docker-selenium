@@ -19,7 +19,7 @@ RUN apt -yqq update && \
     apt -yqq install curl unzip && \
     apt -yqq install iputils-ping && \
     apt -yqq install xvfb && \
-    apt -yqq install fonts-ipafont-gothic xfonts-100dpi xfonts-75dpi xfonts-scalable xfonts-cyrillic && \
+    apt -yqq install fonts-ipafont-gothic xfonts-100dpi xfonts-75dpi xfonts-scalable && \
     rm -rf /var/lib/apt/lists/*
 
 COPY tinywm_1.3-9build1_amd64.deb /tmp
