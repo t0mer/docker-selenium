@@ -1,5 +1,5 @@
 
-FROM python:3.14.0a1-slim-bookworm
+FROM python:3.14.0a3-alpine3.21
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV DEBCONF_NONINTERACTIVE_SEEN true
