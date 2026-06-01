@@ -25,12 +25,14 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -yqq update && \
     rm -rf /var/lib/apt/lists/*
 
 
-# Install Chrome WebDriver
-RUN CHROMEDRIVER_VERSION=`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE` && \
+# Install Chrome WebDriver (Chrome for Testing API — supports Chrome >= 115)
+RUN CHROMEDRIVER_VERSION=$(curl -fsSL https://googlechromelabs.github.io/chrome-for-testing/LATEST_RELEASE_STABLE) && \
     mkdir -p /opt/chromedriver && \
-    curl -sS -o /tmp/chromedriver_linux64.zip http://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip && \
-    unzip -qq /tmp/chromedriver_linux64.zip -d /opt/chromedriver && \
-    rm /tmp/chromedriver_linux64.zip && \
+    curl -fsSL -o /tmp/chromedriver_linux64.zip \
+        "https://storage.googleapis.com/chrome-for-testing-public/${CHROMEDRIVER_VERSION}/linux64/chromedriver-linux64.zip" && \
+    unzip -qq /tmp/chromedriver_linux64.zip -d /tmp/chromedriver_extract && \
+    mv /tmp/chromedriver_extract/chromedriver-linux64/chromedriver /opt/chromedriver/chromedriver && \
+    rm -rf /tmp/chromedriver_linux64.zip /tmp/chromedriver_extract && \
     chmod +x /opt/chromedriver/chromedriver && \
     ln -fs /opt/chromedriver/chromedriver /usr/local/bin/chromedriver
 
