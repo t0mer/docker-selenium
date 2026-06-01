@@ -11,18 +11,18 @@ RUN groupadd --system automation && \
     chown --recursive automation:automation /home/automation
 
 
-RUN DEBIAN_FRONTEND=noninteractive apt -yqq update && \
-    apt -yqq install gnupg2 && \
-    apt -yqq install curl unzip && \
-    apt -yqq install iputils-ping && \
-    apt -yqq install xvfb && \
-    apt -yqq install fonts-ipafont-gothic xfonts-100dpi xfonts-75dpi xfonts-scalable && \
+RUN DEBIAN_FRONTEND=noninteractive apt-get -yqq update && \
+    apt-get -yqq install --no-install-recommends \
+        gnupg2 \
+        curl \
+        unzip \
+        xvfb \
+        tinywm \
+        fonts-ipafont-gothic \
+        xfonts-100dpi \
+        xfonts-75dpi \
+        xfonts-scalable && \
     rm -rf /var/lib/apt/lists/*
-
-COPY tinywm_1.3-9build1_amd64.deb /tmp
-
-RUN dpkg -i /tmp/tinywm_1.3-9build1_amd64.deb && \
-    rm -rf /tmp/tinywm_1.3-9build1_amd64.deb
 
 
 # Install Chrome WebDriver
