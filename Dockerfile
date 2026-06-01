@@ -1,8 +1,6 @@
 
 FROM python:3.12-slim-bookworm
 
-ENV DEBIAN_FRONTEND noninteractive
-ENV DEBCONF_NONINTERACTIVE_SEEN true
 ENV PYTHONIOENCODING=utf-8
 ENV LANG=C.UTF-8
 
@@ -13,7 +11,7 @@ RUN groupadd --system automation && \
     chown --recursive automation:automation /home/automation
 
 
-RUN apt -yqq update && \
+RUN DEBIAN_FRONTEND=noninteractive apt -yqq update && \
     apt -yqq install gnupg2 && \
     apt -yqq install curl unzip && \
     apt -yqq install iputils-ping && \
@@ -39,7 +37,7 @@ RUN CHROMEDRIVER_VERSION=`curl -sS chromedriver.storage.googleapis.com/LATEST_RE
 # Install Google Chrome
 RUN curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
     echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list && \
-    apt-get -yqq update && \
+    DEBIAN_FRONTEND=noninteractive apt-get -yqq update && \
     apt-get -yqq install google-chrome-stable && \
     rm -rf /var/lib/apt/lists/*
 
