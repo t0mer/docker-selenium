@@ -55,7 +55,6 @@ ENV CHROMEDRIVER_EXTRA_ARGS ''
 ENV PATH="${PATH}:/opt/chromedriver/"
 
 EXPOSE 4444
-EXPOSE 6700
 
 COPY requirements.txt /tmp
 
