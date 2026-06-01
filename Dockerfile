@@ -36,11 +36,13 @@ RUN CHROMEDRIVER_VERSION=$(curl -fsSL https://googlechromelabs.github.io/chrome-
     chmod +x /opt/chromedriver/chromedriver && \
     ln -fs /opt/chromedriver/chromedriver /usr/local/bin/chromedriver
 
-# Install Google Chrome
-RUN curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
-    echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list && \
+# Install Google Chrome (scoped keyring — not global apt-key)
+RUN curl -fsSL https://dl.google.com/linux/linux_signing_key.pub \
+        | gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg && \
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] https://dl.google.com/linux/chrome/deb/ stable main" \
+        > /etc/apt/sources.list.d/google-chrome.list && \
     DEBIAN_FRONTEND=noninteractive apt-get -yqq update && \
-    apt-get -yqq install google-chrome-stable && \
+    apt-get -yqq install --no-install-recommends google-chrome-stable && \
     rm -rf /var/lib/apt/lists/*
 
 # Default configuration
