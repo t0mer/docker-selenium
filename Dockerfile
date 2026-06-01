@@ -1,6 +1,10 @@
 
 FROM python:3.12-slim-bookworm
 
+LABEL org.opencontainers.image.source="https://github.com/t0mer/docker-selenium" \
+      org.opencontainers.image.description="Headless Chrome + ChromeDriver environment for Selenium automation" \
+      org.opencontainers.image.licenses="MIT"
+
 ENV PYTHONIOENCODING=utf-8
 ENV LANG=C.UTF-8
 
@@ -61,4 +65,9 @@ COPY requirements.txt /tmp
 RUN pip3 install --no-cache-dir pip==25.1.1 setuptools==80.9.0 && \
     pip3 install --no-cache-dir -r /tmp/requirements.txt
 
-    
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
+    CMD curl -fsS http://127.0.0.1:${CHROMEDRIVER_PORT}/status || exit 1
+
+WORKDIR /home/automation
+USER automation
+
