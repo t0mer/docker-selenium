@@ -58,7 +58,7 @@ EXPOSE 4444
 
 COPY requirements.txt /tmp
 
-RUN pip3 install --upgrade pip setuptools --no-cache-dir
-RUN pip3 install -r /tmp/requirements.txt
+RUN pip3 install --no-cache-dir pip==25.1.1 setuptools==80.9.0 && \
+    pip3 install --no-cache-dir -r /tmp/requirements.txt
 
     
