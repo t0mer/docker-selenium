@@ -1,9 +1,10 @@
 
-FROM python:3.14-rc-slim-bookworm
+FROM python:3.12-slim-bookworm
 
-ENV DEBIAN_FRONTEND noninteractive
-ENV DEBCONF_NONINTERACTIVE_SEEN true
-ENV API_KEY ""
+LABEL org.opencontainers.image.source="https://github.com/t0mer/docker-selenium" \
+      org.opencontainers.image.description="Headless Chrome + ChromeDriver environment for Selenium automation" \
+      org.opencontainers.image.licenses="MIT"
+
 ENV PYTHONIOENCODING=utf-8
 ENV LANG=C.UTF-8
 
@@ -14,34 +15,38 @@ RUN groupadd --system automation && \
     chown --recursive automation:automation /home/automation
 
 
-RUN apt -yqq update && \
-    apt -yqq install gnupg2 && \
-    apt -yqq install curl unzip && \
-    apt -yqq install iputils-ping && \
-    apt -yqq install xvfb && \
-    apt -yqq install fonts-ipafont-gothic xfonts-100dpi xfonts-75dpi xfonts-scalable && \
+RUN DEBIAN_FRONTEND=noninteractive apt-get -yqq update && \
+    apt-get -yqq install --no-install-recommends \
+        gnupg2 \
+        curl \
+        unzip \
+        xvfb \
+        tinywm \
+        fonts-ipafont-gothic \
+        xfonts-100dpi \
+        xfonts-75dpi \
+        xfonts-scalable && \
     rm -rf /var/lib/apt/lists/*
 
-COPY tinywm_1.3-9build1_amd64.deb /tmp
 
-RUN dpkg -i /tmp/tinywm_1.3-9build1_amd64.deb && \
-    rm -rf /tmp/tinywm_1.3-9build1_amd64.deb
-
-
-# Install Chrome WebDriver
-RUN CHROMEDRIVER_VERSION=`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE` && \
+# Install Chrome WebDriver (Chrome for Testing API — supports Chrome >= 115)
+RUN CHROMEDRIVER_VERSION=$(curl -fsSL https://googlechromelabs.github.io/chrome-for-testing/LATEST_RELEASE_STABLE) && \
     mkdir -p /opt/chromedriver && \
-    curl -sS -o /tmp/chromedriver_linux64.zip http://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip && \
-    unzip -qq /tmp/chromedriver_linux64.zip -d /opt/chromedriver && \
-    rm /tmp/chromedriver_linux64.zip && \
+    curl -fsSL -o /tmp/chromedriver_linux64.zip \
+        "https://storage.googleapis.com/chrome-for-testing-public/${CHROMEDRIVER_VERSION}/linux64/chromedriver-linux64.zip" && \
+    unzip -qq /tmp/chromedriver_linux64.zip -d /tmp/chromedriver_extract && \
+    mv /tmp/chromedriver_extract/chromedriver-linux64/chromedriver /opt/chromedriver/chromedriver && \
+    rm -rf /tmp/chromedriver_linux64.zip /tmp/chromedriver_extract && \
     chmod +x /opt/chromedriver/chromedriver && \
     ln -fs /opt/chromedriver/chromedriver /usr/local/bin/chromedriver
 
-# Install Google Chrome
-RUN curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
-    echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list && \
-    apt-get -yqq update && \
-    apt-get -yqq install google-chrome-stable && \
+# Install Google Chrome (scoped keyring — not global apt-key)
+RUN curl -fsSL https://dl.google.com/linux/linux_signing_key.pub \
+        | gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg && \
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] https://dl.google.com/linux/chrome/deb/ stable main" \
+        > /etc/apt/sources.list.d/google-chrome.list && \
+    DEBIAN_FRONTEND=noninteractive apt-get -yqq update && \
+    apt-get -yqq install --no-install-recommends google-chrome-stable && \
     rm -rf /var/lib/apt/lists/*
 
 # Default configuration
@@ -54,11 +59,15 @@ ENV CHROMEDRIVER_EXTRA_ARGS ''
 ENV PATH="${PATH}:/opt/chromedriver/"
 
 EXPOSE 4444
-EXPOSE 6700
 
 COPY requirements.txt /tmp
 
-RUN pip3 install --upgrade pip setuptools --no-cache-dir
-RUN pip3 install -r /tmp/requirements.txt
+RUN pip3 install --no-cache-dir pip==25.1.1 setuptools==80.9.0 && \
+    pip3 install --no-cache-dir -r /tmp/requirements.txt
 
-    
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
+    CMD curl -fsS http://127.0.0.1:${CHROMEDRIVER_PORT}/status || exit 1
+
+WORKDIR /home/automation
+USER automation
+
